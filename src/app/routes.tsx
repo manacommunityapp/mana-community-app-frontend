@@ -1,0 +1,167 @@
+import { createBrowserRouter } from "react-router";
+import { Layout } from "./components/commons/layout/Layout";
+import { Feed } from "./components/community/Feed";
+import { Marketplace } from "./components/marketplace/Marketplace";
+import { Jobs } from "./components/jobs/Jobs";
+import { Events } from "./components/events/Events";
+import { Login } from "./components/commons/login/Login";
+import { Signup } from "./components/Signup";
+import { KYCVerification } from "./components/commons/verification/KYCVerification";
+import { AdminDashboard } from "./components/admin/AdminDashboard";
+import { Chat } from "./components/chat/Chat";
+
+import { AdminCreateUser } from "./components/admin/AdminCreateUser";
+import { AdminBulkUpload } from "./components/admin/AdminBulkUpload";
+import { AdminVenues } from "./components/admin/AdminVenues";
+import { AdminCommunity } from "./components/admin/AdminCommunity";
+import { AdminRoleManagement } from "./components/admin/AdminRoleManagement";
+import { ProfileDashboard } from "./components/profile/ProfileDashboard";
+import { ArchitectureDocs } from "./components/architecture/ArchitectureDocs";
+import { RootErrorElement } from "./components/commons/error/RootErrorElement";
+import { PermissionGuard } from "./components/commons/guards/PermissionGuard";
+
+// Sports pages
+import { SportsLayout }       from "./components/sports/SportsLayout";
+import { SportsDashboard }    from "./components/sports/SportsDashboard";
+import { SportsRegistration } from "./components/sports/SportsRegistration";
+import { SportsSchedule }     from "./components/sports/SportsSchedule";
+import { SportsAuction }      from "./components/sports/SportsAuction";
+import { SportsAdmin }        from "./components/sports/admin/SportsAdmin";
+import { SportsRegister }     from "./components/sports/SportsRegister";
+import { MySports }           from "./components/sports/MySports";
+import { SportsAnalytics }    from "./components/sports/SportsAnalytics";
+
+// Permission constants
+import {
+  VIEW_FEED, VIEW_SPORTS_MENU, VIEW_EVENT_REGISTRATIONS,
+  VIEW_LIVE_AUCTION, VIEW_AUCTION_CONFIG, VIEW_TEAMS_DASHBOARD,
+  VIEW_PLAYER_POOL, VIEW_AUCTION_RESULTS,
+  CREATE_EDIT_SPORTS_MAIN, VIEW_ADMIN, BULK_UPLOAD, MANAGE_COMMUNITIES,
+  MANAGE_ROLES, VIEW_MARKETPLACE, VIEW_JOBS, VIEW_EVENTS,
+} from "../constants/permissions";
+
+export const router = createBrowserRouter([
+  {
+    path: "/login",
+    Component: Login,
+  },
+  {
+    path: "/signup",
+    Component: Signup,
+  },
+  {
+    path: "/kyc-verification",
+    Component: KYCVerification,
+  },
+  {
+    path: "/",
+    Component: Layout,
+    errorElement: <RootErrorElement />,
+    children: [
+      { 
+        index: true, 
+        element: <PermissionGuard permission={VIEW_FEED}><Feed /></PermissionGuard> 
+      },
+      {
+        path: "sports",
+        Component: SportsLayout,
+        children: [
+          { 
+            index: true, 
+            element: <PermissionGuard permission={VIEW_SPORTS_MENU}><SportsDashboard /></PermissionGuard> 
+          },
+          { 
+            path: "my-sports", 
+            element: <PermissionGuard permission={VIEW_EVENT_REGISTRATIONS}><MySports /></PermissionGuard> 
+          },
+          { 
+            path: "register", 
+            element: <PermissionGuard permission={VIEW_EVENT_REGISTRATIONS}><MySports /></PermissionGuard> 
+          },
+          {
+            path: "register/:eventUuid",
+            element: <PermissionGuard permission={VIEW_EVENT_REGISTRATIONS}><SportsRegister /></PermissionGuard>
+          },
+          {
+            path: "schedule",
+            element: <PermissionGuard permission={VIEW_SPORTS_MENU}><SportsSchedule /></PermissionGuard>
+          },
+          {
+            path: "schedule/:eventId",
+            element: <PermissionGuard permission={VIEW_SPORTS_MENU}><SportsSchedule /></PermissionGuard>
+          },
+          {
+            path: "auction",
+            element: <PermissionGuard anyPermissions={[VIEW_LIVE_AUCTION, VIEW_AUCTION_CONFIG, VIEW_TEAMS_DASHBOARD, VIEW_PLAYER_POOL, VIEW_EVENT_REGISTRATIONS, VIEW_AUCTION_RESULTS]}><SportsAuction /></PermissionGuard>
+          },
+          {
+            path: "auction/:eventId",
+            element: <PermissionGuard anyPermissions={[VIEW_LIVE_AUCTION, VIEW_AUCTION_CONFIG, VIEW_TEAMS_DASHBOARD, VIEW_PLAYER_POOL, VIEW_EVENT_REGISTRATIONS, VIEW_AUCTION_RESULTS]}><SportsAuction /></PermissionGuard>
+          },
+          { 
+            path: "admin", 
+            element: <PermissionGuard permission={CREATE_EDIT_SPORTS_MAIN}><SportsAdmin /></PermissionGuard> 
+          },
+          { 
+            path: "analytics", 
+            element: <PermissionGuard permission={VIEW_SPORTS_MENU}><SportsAnalytics /></PermissionGuard> 
+          },
+        ],
+      },
+      {
+        path: "admin",
+        children: [
+          { 
+            index: true, 
+            element: <PermissionGuard permission={VIEW_ADMIN}><AdminDashboard /></PermissionGuard> 
+          },
+          { 
+            path: "create-user", 
+            element: <PermissionGuard permission={VIEW_ADMIN}><AdminCreateUser /></PermissionGuard> 
+          },
+          { 
+            path: "bulk-upload", 
+            element: <PermissionGuard permission={BULK_UPLOAD}><AdminBulkUpload /></PermissionGuard> 
+          },
+          { 
+            path: "venues", 
+            element: <PermissionGuard permission={VIEW_ADMIN}><AdminVenues /></PermissionGuard> 
+          },
+          { 
+            path: "create-community", 
+            element: <PermissionGuard permission={MANAGE_COMMUNITIES}><AdminCommunity /></PermissionGuard> 
+          },
+          { 
+            path: "roles", 
+            element: <PermissionGuard permission={MANAGE_ROLES}><AdminRoleManagement /></PermissionGuard> 
+          },
+        ]
+      },
+      { 
+        path: "marketplace", 
+        element: <PermissionGuard permission={VIEW_MARKETPLACE}><Marketplace /></PermissionGuard> 
+      },
+      { 
+        path: "jobs", 
+        element: <PermissionGuard permission={VIEW_JOBS}><Jobs /></PermissionGuard> 
+      },
+      { 
+        path: "events", 
+        element: <PermissionGuard permission={VIEW_EVENTS}><Events /></PermissionGuard> 
+      },
+      {
+        path: "chat",
+        element: <Chat />,
+      },
+      {
+        path: "profile",
+        Component: ProfileDashboard
+      },
+      {
+        path: "architecture",
+        element: <PermissionGuard superAdminOnly><ArchitectureDocs /></PermissionGuard>,
+      },
+    ],
+  },
+]);
+

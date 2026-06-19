@@ -1,0 +1,54 @@
+.playoff-bracket .bracket {
+  min-height: 505px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.playoff-bracket .bracket::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.playoff-bracket .bracket::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+.playoff-bracket .bracket::-webkit-scrollbar-thumb {
+  background: #818cf8;
+  border-radius: 9999px;
+}
+
+.playoff-bracket .bracket::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
+}
+
+.playoff-bracket .matchup {
+  width: 248px;
+}
+
+.playoff-bracket .connector {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  border-left: 3px solid rgba(99, 102, 241, 0.3);
+  pointer-events: none;
+}
+
+.playoff-bracket .merger-right {
+  position: absolute;
+  right: -15px;
+  bottom: 50%;
+  width: 15px;
+  border-bottom: 3px solid rgba(99, 102, 241, 0.3);
+  pointer-events: none;
+}
+
+.playoff-bracket .merger-left {
+  position: absolute;
+  left: -15px;
+  bottom: 50%;
+  width: 15px;
+  border-bottom: 3px solid rgba(99, 102, 241, 0.3);
+  pointer-events: none;
+}
